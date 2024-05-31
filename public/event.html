@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Взаємодія з подіями</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Взаємодія з подіями</h1>
+        <form id="eventForm">
+            <label for="date">Дата:</label>
+            <input type="date" id="date" name="date" required>
+            <label for="type">Тип:</label>
+            <select id="type" name="type">
+                <option value="text">Текст</option>
+                <option value="image">Зображення</option>
+                <option value="video">Відео</option>
+                <option value="music">Музика</option>
+            </select>
+            <label for="content">Контент:</label>
+            <textarea id="content" name="content" required></textarea>
+            <button type="submit">Додати</button>
+        </form>
+        <div id="eventsContainer"></div>
+    </div>
+    <script src="/js/script.js"></script>
+</body>
+</html>

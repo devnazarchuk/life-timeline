@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вибір дати народження</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Виберіть вашу дату народження</h1>
+        <form id="birthdateForm">
+            <label for="birthdate">Дата народження:</label>
+            <input type="date" id="birthdate" name="birthdate" required>
+            <button type="submit">Підтвердити</button>
+        </form>
+        <div id="intervalContainer" style="display: none;">
+            <label for="interval">Інтервал:</label>
+            <select id="interval" name="interval">
+                <option value="weeks">Тижні</option>
+                <option value="months">Місяці</option>
+                <option value="years">Роки</option>
+            </select>
+            <button id="proceedButton">Продовжити</button>
+        </div>
+    </div>
+    <script src="/js/script.js"></script>
+</body>
+</html>

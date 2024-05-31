@@ -1,0 +1,43 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+}
+
+#timelineContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    margin: auto;
+}
+
+.time-unit {
+    width: 10px;
+    height: 10px;
+    margin: 1px;
+    background-color: #e0e0e0;
+}
+
+.past {
+    background-color: black;
+}
+
+.present {
+    background-color: yellow;
+}
+
+#interactionContainer {
+    margin-top: 20px;
+}
+
+#resultContainer {
+    margin-top: 20px;
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Життєвий графік</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Ваш життєвий графік</h1>
+        <div id="intervalContainer">
+            <label for="interval">Інтервал:</label>
+            <select id="interval" name="interval">
+                <option value="weeks">Тижні</option>
+                <option value="months">Місяці</option>
+                <option value="years">Роки</option>
+            </select>
+            <button id="updateIntervalButton">Оновити</button>
+        </div>
+        <div id="timelineContainer"></div>
+        <div id="interactionContainer">
+            <input type="text" id="searchDate" placeholder="Шукати дату">
+            <button id="searchButton">Шукати</button>
+            <div id="resultContainer"></div>
+        </div>
+    </div>
+    <script src="/js/script.js"></script>
+</body>
+</html>
