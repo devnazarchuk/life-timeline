@@ -89,22 +89,15 @@ document.addEventListener("DOMContentLoaded", function() {
     eventForm?.addEventListener("submit", async function(event) {
         event.preventDefault();
         const formData = new FormData(eventForm);
-        const eventObj = {
-            date: formData.get('date'),
-            type: formData.get('type'),
-            content: formData.get('content')
-        };
-
         const response = await fetch('/events', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(eventObj)
+            body: formData
         });
 
         if (response.ok) {
             alert('Подію додано успішно');
+            const date = formData.get('date');
+            loadEvents(date); // Завантажити події для поточної дати
         } else {
             alert('Помилка при додаванні події');
         }
@@ -112,24 +105,41 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const dateParam = urlParams.get('date');
     if (dateParam) {
-        const eventsContainer = document.getElementById("eventsContainer");
-        fetch(`/events/${dateParam}`)
-            .then(response => response.json())
-            .then(events => {
-                events.forEach(event => {
-                    const eventDiv = document.createElement('div');
-                    eventDiv.classList.add('event');
-                    eventDiv.innerHTML = `
-                        <p>Тип: ${event.type}</p>
-                        <p>Контент: ${event.content}</p>
-                        <button onclick="editEvent('${event._id}')">Редагувати</button>
-                        <button onclick="deleteEvent('${event._id}')">Видалити</button>
-                    `;
-                    eventsContainer.appendChild(eventDiv);
-                });
-            });
+        loadEvents(dateParam);
     }
 });
+
+async function loadEvents(date) {
+    const eventsContainer = document.getElementById("eventsContainer");
+    eventsContainer.innerHTML = '';
+    const response = await fetch(`/events/${date}`);
+    const events = await response.json();
+    events.forEach(event => {
+        const eventDiv = document.createElement('div');
+        eventDiv.classList.add('event');
+        let content;
+        switch (event.type) {
+            case 'image':
+                content = `<img src="/uploads/${event.content}" alt="Image">`;
+                break;
+            case 'video':
+                content = `<video controls src="/uploads/${event.content}"></video>`;
+                break;
+            case 'music':
+                content = `<audio controls src="/uploads/${event.content}"></audio>`;
+                break;
+            default:
+                content = event.content;
+        }
+        eventDiv.innerHTML = `
+            <p>Тип: ${event.type}</p>
+            <div>${content}</div>
+            <button onclick="editEvent('${event._id}')">Редагувати</button>
+            <button onclick="deleteEvent('${event._id}')">Видалити</button>
+        `;
+        eventsContainer.appendChild(eventDiv);
+    });
+}
 
 async function editEvent(id) {
     const newContent = prompt('Введіть новий контент:');

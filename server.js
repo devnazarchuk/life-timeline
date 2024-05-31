@@ -2,16 +2,29 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 require('dotenv').config();
 
 const Event = require('./models/event');
 
 const app = express();
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const upload = multer({ storage });
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Підключення до MongoDB
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -33,9 +46,14 @@ app.get('/event', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'event.html'));
 });
 
-app.post('/events', async (req, res) => {
+// API для подій
+app.post('/events', upload.single('file'), async (req, res) => {
     try {
-        const event = new Event(req.body);
+        const event = new Event({
+            date: req.body.date,
+            type: req.body.type,
+            content: req.file ? req.file.filename : req.body.content
+        });
         await event.save();
         res.status(201).send(event);
     } catch (error) {
