@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const urlParams = new URLSearchParams(window.location.search);
     const birthdate = urlParams.get('birthdate');
     const interval = urlParams.get('interval');
+    const date = urlParams.get('date');
 
     if (birthdate && interval) {
         const intervalSelect = document.getElementById("interval");
@@ -54,14 +55,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
         for (let i = 0; i < totalUnits; i++) {
             const timeUnitDiv = document.createElement("div");
+            const unitDate = new Date(birthDate);
+            unitDate.setDate(unitDate.getDate() + i * (unit === 'week' ? 7 : (unit === 'month' ? 30 : 365)));
             timeUnitDiv.classList.add("time-unit");
+            timeUnitDiv.dataset.date = unitDate.toISOString().split('T')[0];
             if (i < unitsPassed) {
                 timeUnitDiv.classList.add("past");
             } else if (i === unitsPassed) {
                 timeUnitDiv.classList.add("present");
             }
             timeUnitDiv.addEventListener('click', () => {
-                window.location.href = `/event?date=${new Date(birthDate).setDate(birthDate.getDate() + i * (unit === 'week' ? 7 : (unit === 'month' ? 30 : 365)))}`;
+                window.location.href = `/day?date=${unitDate.toISOString().split('T')[0]}&interval=${interval}`;
             });
             weeksContainer.appendChild(timeUnitDiv);
         }
@@ -82,6 +86,24 @@ document.addEventListener("DOMContentLoaded", function() {
             const resultContainer = document.getElementById("resultContainer");
             resultContainer.innerHTML = `<p>Вибрана дата: ${searchDate}</p>`;
             // Додати код для відображення подій та взаємодії з вибраною датою
+        }
+    });
+
+    const typeSelect = document.getElementById("type");
+    const textContent = document.getElementById("textContent");
+    const fileContent = document.getElementById("fileContent");
+
+    typeSelect?.addEventListener("change", function() {
+        const selectedType = typeSelect.value;
+        if (selectedType === "text") {
+            textContent.style.display = "block";
+            fileContent.style.display = "none";
+        } else if (selectedType) {
+            textContent.style.display = "none";
+            fileContent.style.display = "block";
+        } else {
+            textContent.style.display = "none";
+            fileContent.style.display = "none";
         }
     });
 
@@ -107,42 +129,130 @@ document.addEventListener("DOMContentLoaded", function() {
     if (dateParam) {
         loadEvents(dateParam);
     }
+
+    const addContentButton = document.getElementById("addContentButton");
+    const contentForm = document.getElementById("contentForm");
+
+    addContentButton?.addEventListener("click", function() {
+        contentForm.style.display = "block";
+        addContentButton.style.display = "none";
+    });
+
+    const dayDetails = document.getElementById("dayDetails");
+    if (dayDetails && dateParam) {
+        loadDayDetails(dateParam);
+    }
 });
+
+async function loadDayDetails(date) {
+    const dayDetails = document.getElementById("dayDetails");
+    if (dayDetails) {
+        dayDetails.innerHTML = '';
+        try {
+            const response = await fetch(`/events/${date}`);
+            const events = await response.json();
+            if (Array.isArray(events)) {
+                events.forEach(event => {
+                    const eventDiv = document.createElement('div');
+                    eventDiv.classList.add('event');
+                    let content;
+                    switch (event.type) {
+                        case 'image':
+                            content = `<img src="/uploads/${event.content}" alt="Image">`;
+                            break;
+                        case 'video':
+                            content = `<video controls src="/uploads/${event.content}"></video>`;
+                            break;
+                        case 'music':
+                            content = `<audio controls src="/uploads/${event.content}"></audio>`;
+                            break;
+                        default:
+                            content = event.content;
+                    }
+                    eventDiv.innerHTML = `
+                        <p>Тип: ${event.type}</p>
+                        <div>${content}</div>
+                        <button onclick="editEvent('${event._id}', '${event.type}', '${event.content}')">Редагувати</button>
+                        <button onclick="deleteEvent('${event._id}')">Видалити</button>
+                    `;
+                    dayDetails.appendChild(eventDiv);
+                });
+            } else {
+                console.error('Expected an array but received:', events);
+            }
+        } catch (error) {
+            console.error('Error loading day details:', error);
+        }
+    }
+}
 
 async function loadEvents(date) {
     const eventsContainer = document.getElementById("eventsContainer");
-    eventsContainer.innerHTML = '';
-    const response = await fetch(`/events/${date}`);
-    const events = await response.json();
-    events.forEach(event => {
-        const eventDiv = document.createElement('div');
-        eventDiv.classList.add('event');
-        let content;
-        switch (event.type) {
-            case 'image':
-                content = `<img src="/uploads/${event.content}" alt="Image">`;
-                break;
-            case 'video':
-                content = `<video controls src="/uploads/${event.content}"></video>`;
-                break;
-            case 'music':
-                content = `<audio controls src="/uploads/${event.content}"></audio>`;
-                break;
-            default:
-                content = event.content;
+    if (eventsContainer) {
+        eventsContainer.innerHTML = '';
+        try {
+            const response = await fetch(`/events/${date}`);
+            const events = await response.json();
+            if (Array.isArray(events)) {
+                events.forEach(event => {
+                    const eventDiv = document.createElement('div');
+                    eventDiv.classList.add('event');
+                    let content;
+                    switch (event.type) {
+                        case 'image':
+                            content = `<img src="/uploads/${event.content}" alt="Image">`;
+                            break;
+                        case 'video':
+                            content = `<video controls src="/uploads/${event.content}"></video>`;
+                            break;
+                        case 'music':
+                            content = `<audio controls src="/uploads/${event.content}"></audio>`;
+                            break;
+                        default:
+                            content = event.content;
+                    }
+                    eventDiv.innerHTML = `
+                        <p>Тип: ${event.type}</p>
+                        <div>${content}</div>
+                        <button onclick="editEvent('${event._id}', '${event.type}', '${event.content}')">Редагувати</button>
+                        <button onclick="deleteEvent('${event._id}')">Видалити</button>
+                    `;
+                    eventsContainer.appendChild(eventDiv);
+                });
+            } else {
+                console.error('Expected an array but received:', events);
+            }
+        } catch (error) {
+            console.error('Error loading events:', error);
         }
-        eventDiv.innerHTML = `
-            <p>Тип: ${event.type}</p>
-            <div>${content}</div>
-            <button onclick="editEvent('${event._id}')">Редагувати</button>
-            <button onclick="deleteEvent('${event._id}')">Видалити</button>
-        `;
-        eventsContainer.appendChild(eventDiv);
-    });
+    }
 }
 
-async function editEvent(id) {
-    const newContent = prompt('Введіть новий контент:');
+async function editEvent(id, type, content) {
+    let newContent = '';
+    if (type === 'text') {
+        newContent = prompt('Введіть новий контент:', content);
+    } else {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.addEventListener('change', async () => {
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            const response = await fetch(`/events/${id}/file`, {
+                method: 'PUT',
+                body: formData
+            });
+            if (response.ok) {
+                alert('Подію оновлено успішно');
+                location.reload();
+            } else {
+                alert('Помилка при оновленні події');
+            }
+        });
+        fileInput.click();
+        return;
+    }
+
     if (newContent) {
         const response = await fetch(`/events/${id}`, {
             method: 'PUT',
