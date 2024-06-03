@@ -1,10 +1,7 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import UserForm from '../components/UserForm.vue';
 import Timeline from '../components/Timeline.vue';
 import DateView from '../components/DateView.vue';
-
-Vue.use(VueRouter);
 
 const routes = [
   { path: '/', name: 'Home', component: UserForm },
@@ -12,8 +9,8 @@ const routes = [
   { path: '/date/:date', name: 'DateView', component: DateView, props: true },
 ];
 
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   routes,
 });
 
