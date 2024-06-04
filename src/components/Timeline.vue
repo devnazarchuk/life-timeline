@@ -7,10 +7,14 @@
       <button @click="setInterval('year')" class="bg-blue-500 text-white px-4 py-2 rounded">Years</button>
     </div>
     <div class="grid grid-cols-10 gap-2">
-      <div 
-        v-for="(period, index) in periods" 
-        :key="index" 
-        :class="{'bg-black': period === 'past', 'bg-green-500': period === 'current', 'bg-gray-200': period === 'future'}"
+      <div
+        v-for="(period, index) in periods"
+        :key="index"
+        :class="{
+          'bg-black': period === 'past',
+          'bg-green-500': period === 'current',
+          'bg-gray-200': period === 'future'
+        }"
         class="w-10 h-10 border"
         @mouseover="showTooltip(index)"
         @mouseout="hideTooltip"
@@ -22,7 +26,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   props: ['name', 'gender', 'country', 'happiness', 'birthdate'],
   data() {
     return {
@@ -42,17 +48,29 @@ export default {
       this.lifeExpectancy += Math.floor(Math.random() * 4) + 5; // Add 5-8 years randomly
     },
     generateTimeline() {
+      const birthDate = new Date(this.birthdate);
+      const currentDate = new Date();
       const totalPeriods = this.lifeExpectancy * (this.interval === 'week' ? 52 : this.interval === 'month' ? 12 : 1);
-      const currentPeriod = Math.floor((new Date() - new Date(this.birthdate)) / (this.interval === 'week' ? (7 * 24 * 60 * 60 * 1000) : this.interval === 'month' ? (30 * 24 * 60 * 60 * 1000) : (365 * 24 * 60 * 60 * 1000)));
+      const elapsedPeriods = this.calculateElapsedPeriods(birthDate, currentDate);
 
       for (let i = 0; i < totalPeriods; i++) {
-        if (i < currentPeriod) {
+        if (i < elapsedPeriods) {
           this.periods.push('past');
-        } else if (i === currentPeriod) {
+        } else if (i === elapsedPeriods) {
           this.periods.push('current');
         } else {
           this.periods.push('future');
         }
+      }
+    },
+    calculateElapsedPeriods(startDate, endDate) {
+      const diff = endDate - startDate;
+      if (this.interval === 'week') {
+        return Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
+      } else if (this.interval === 'month') {
+        return Math.floor(diff / (30 * 24 * 60 * 60 * 1000));
+      } else {
+        return Math.floor(diff / (365 * 24 * 60 * 60 * 1000));
       }
     },
     setInterval(interval) {
@@ -83,7 +101,7 @@ export default {
       this.$router.push({ name: 'DateView', params: { date: this.getPeriodLabel(index) } });
     },
   },
-};
+});
 </script>
 
 <style scoped>

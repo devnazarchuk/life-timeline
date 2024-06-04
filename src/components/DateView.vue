@@ -7,6 +7,7 @@
         <div v-if="item.type === 'image'"><img :src="item.data" alt="User content" /></div>
         <div v-if="item.type === 'video'"><video controls :src="item.data"></video></div>
         <div v-if="item.type === 'music'"><audio controls :src="item.data"></audio></div>
+        <button @click="deleteContent(index)" class="text-red-500">Delete</button>
       </div>
     </div>
     <div v-else>
@@ -22,7 +23,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   props: ['date'],
   data() {
     return {
@@ -54,8 +57,11 @@ export default {
         this.content.push({ type: 'music', data: musicUrl });
       }
     },
+    deleteContent(index) {
+      this.content.splice(index, 1);
+    },
   },
-};
+});
 </script>
 
 <style scoped>

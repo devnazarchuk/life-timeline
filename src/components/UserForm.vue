@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container m-auto p-4">
     <h1 class="text-3xl font-bold mb-4">Welcome! Enter Your Details</h1>
     <form @submit.prevent="submitForm">
       <div class="mb-4">
@@ -56,7 +56,7 @@ export default defineComponent({
     submitForm() {
       this.$router.push({
         name: 'Timeline',
-        params: {
+        query: {
           name: this.name,
           gender: this.gender,
           country: this.country,

@@ -9,5 +9,6 @@ export default {
 </script>
 
 <style scoped>
+
 /* Add global styles here if necessary */
 </style>

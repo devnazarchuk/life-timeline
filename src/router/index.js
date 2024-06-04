@@ -5,7 +5,18 @@ import DateView from '../components/DateView.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: UserForm },
-  { path: '/timeline', name: 'Timeline', component: Timeline, props: true },
+  { 
+    path: '/timeline', 
+    name: 'Timeline', 
+    component: Timeline, 
+    props: route => ({
+      name: route.query.name,
+      gender: route.query.gender,
+      country: route.query.country,
+      happiness: route.query.happiness,
+      birthdate: route.query.birthdate,
+    })
+  },
   { path: '/date/:date', name: 'DateView', component: DateView, props: true },
 ];
 
