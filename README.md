@@ -1,35 +1,14 @@
-# life-calendar
+### Frontend Template Repository
+# Welcome
+Welcome to my Frontend Template Repository! Find simple, functional template to jumpstart your project.
 
-This template should help get you started developing with Vue 3 in Vite.
+# What I Offer
+Explore template crafted for easy setup and accelerated development. From portfolios to e-commerce sites, we've got you covered.
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+# Features
+Simplicity: Easy-to-use templates for hassle-free development.
+Functionality: Modern components for sleek frontend design.
+Versatility: Suitable for various project types and scopes.
+Community: Join developers for support and collaboration.
+# Get Started
+Browse template and kickstart your projects confidently.
