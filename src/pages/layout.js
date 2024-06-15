@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
         <meta name="keywords" content={metadata.keywords} />
         <meta name="author" content={metadata.author} />
         <link rel="icon" href="@favicon.ico" />
-        <link rel="shortcut icon" href="@favicon.ico"/>
+        <link rel="shortcut icon" href="/favicon.ico"/>
       </head>
       <body className={inter.className}>{children}</body>
     </html>

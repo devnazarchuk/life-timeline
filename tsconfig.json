@@ -21,6 +21,18 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/layout/Layout.jsx", "src/app/page.jsx", "src/app/layout.jsx", "src/components/ResizableTitle.jsx", "src/shared/providers/index.jsx", "src/shared/providers/QueryProvider.jsx", "src/components/ui/button.jsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/components/layout/Layout.jsx",
+    "src/pages/index.js",
+    "src/pages/layout.js",
+    "src/components/ResizableTitle.ts",
+    "src/shared/services/index.ts",
+    "src/shared/services/QueryProvider.ts",
+    "src/components/ui/button.ts"
+  ],
   "exclude": ["node_modules"]
 }
