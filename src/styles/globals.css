@@ -85,4 +85,16 @@ body {
     text-decoration: none;
     color: inherit;
   }
+  label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
   
+  input[type="text"],
+  input[type="number"],
+  select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }

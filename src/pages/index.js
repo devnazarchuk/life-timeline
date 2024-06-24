@@ -2,16 +2,17 @@ import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styles from '../styles/Home.module.css';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
-const Home = () => (
-  <div className={styles.container}>
-    <Header />
-    <main className={styles.main}>
-      <h1 className={styles.h1}>Welcome to My Next.js Project</h1>
-      <p className={styles.p}>This is the homepage.</p>
-    </main>
-    <Footer />
-  </div>
-);
+const Home = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/intro');
+  }, []);
+
+  return null;
+};
 
 export default Home;
