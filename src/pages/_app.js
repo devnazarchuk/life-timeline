@@ -1,8 +1,10 @@
-import React from 'react';
-import '../styles/globals.css'; // Імпорт глобальних стилів
+// pages/_app.js
+import '../styles/globals.css';
+import '../styles/Intro.module.css';
+import '../styles/Main.module.css';
 
-const MyApp = ({ Component, pageProps }) => {
+function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;
-};
+}
 
 export default MyApp;

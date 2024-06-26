@@ -11,8 +11,8 @@
 
 .h1 {
   margin-bottom: 2rem;
-  font-size: 2rem;
-  color: #333;
+  font-size: 1rem;
+  color: red;
 }
 
 .form {
@@ -44,6 +44,10 @@
 
 .datePicker {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
   gap: 0.5rem;
 }
 
@@ -60,4 +64,7 @@
 
 .submitButton:hover {
   background-color: #005bb5;
+}
+.submitButton:active {
+  background-color: #047bf2;
 }

@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import HappinessSlider from './interface/HappinessSlider';
-import styles from '../styles/Intro.module.css'; 
+import styles from '../styles/Intro.module.css';
+import { useRouter } from 'next/router';
 
 const UserForm = () => {
   const [name, setName] = useState('');
   const [gender, setGender] = useState('');
   const [country, setCountry] = useState('');
   const [happiness, setHappiness] = useState(50);
-  const [birthDate, setBirthDate] = useState({
-    day: '',
-    month: '',
-    year: ''
-  });
+  const [birthDate, setBirthDate] = useState(null);
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Обробка даних форми
+    router.push('/main'); // Перенаправлення на основну сторінку
   };
 
   return (
@@ -60,29 +61,13 @@ const UserForm = () => {
       </div>
       <div className={styles.formGroup}>
         <label>Date of Birth:</label>
-        <div className={styles.datePicker}>
-          <input
-            type="number"
-            placeholder="Day"
-            value={birthDate.day}
-            onChange={(e) => setBirthDate({ ...birthDate, day: e.target.value })}
-            required
-          />
-          <input
-            type="number"
-            placeholder="Month"
-            value={birthDate.month}
-            onChange={(e) => setBirthDate({ ...birthDate, month: e.target.value })}
-            required
-          />
-          <input
-            type="number"
-            placeholder="Year"
-            value={birthDate.year}
-            onChange={(e) => setBirthDate({ ...birthDate, year: e.target.value })}
-            required
-          />
-        </div>
+        <DatePicker
+          selected={birthDate}
+          onChange={(date) => setBirthDate(date)}
+          dateFormat="dd/MM/yyyy"
+          placeholderText="Select your birth date"
+          className={styles.datePicker}
+        />
       </div>
       <button type="submit" className={styles.submitButton}>Submit</button>
     </form>

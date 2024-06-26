@@ -1,0 +1,73 @@
+.container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .controls {
+    margin-bottom: 20px;
+  }
+  
+  .controls button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+    gap: 5px;
+    justify-content: center;
+  }
+  
+  .gridItem {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .square {
+    background-color: #ccc;
+  }
+  
+  .circle {
+    background-color: #ccc;
+    border-radius: 50%;
+  }
+  
+  .heart {
+    background-color: #ccc;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    transform: rotate(-45deg);
+  }
+  
+  .heart:before,
+  .heart:after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ccc;
+  }
+  
+  .heart:before {
+    top: -10px;
+    left: 0;
+  }
+  
+  .heart:after {
+    left: 10px;
+    top: 0;
+  }
+  
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid #ccc;
+  }
+  
