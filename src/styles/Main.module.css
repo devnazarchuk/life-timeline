@@ -1,73 +1,189 @@
 .container {
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .controls {
-    margin-bottom: 20px;
-  }
-  
-  .controls button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
-    gap: 5px;
-    justify-content: center;
-  }
-  
-  .gridItem {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .square {
-    background-color: #ccc;
-  }
-  
-  .circle {
-    background-color: #ccc;
-    border-radius: 50%;
-  }
-  
-  .heart {
-    background-color: #ccc;
-    position: relative;
-    width: 20px;
-    height: 20px;
-    transform: rotate(-45deg);
-  }
-  
-  .heart:before,
-  .heart:after {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #ccc;
-  }
-  
-  .heart:before {
-    top: -10px;
-    left: 0;
-  }
-  
-  .heart:after {
-    left: 10px;
-    top: 0;
-  }
-  
-  .triangle {
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 20px solid #ccc;
-  }
-  
+  padding: 20px;
+  text-align: center;
+}
+
+.topControls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdownContent {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdownContent button {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.dropdownContent button:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdownContent {
+  display: block;
+}
+
+.themeButton {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.controls {
+  margin-bottom: 20px;
+}
+
+.controls button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+  gap: 5px;
+  justify-content: center;
+}
+
+.gridItem {
+  width: 20px;
+  height: 20px;
+}
+
+.square {
+  background-color: transparent;
+}
+
+.circle {
+  background-color: transparent;
+  border-radius: 50%;
+}
+
+.heart {
+  background-color: transparent;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  transform: rotate(-45deg);
+}
+
+.heart:before,
+.heart:after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.heart:before {
+  top: -10px;
+  left: 0;
+}
+
+.heart:after {
+  left: 10px;
+  top: 0;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid #ccc;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.black {
+  background-color: black;
+}
+
+.white {
+  background-color: white;
+}
+
+/* add dark mode */
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark-mode .gridItem {
+  background-color: #333333;
+}
+
+body.dark-mode .square {
+  background-color: #333333;
+}
+
+body.dark-mode .circle {
+  background-color: #333333;
+}
+
+body.dark-mode .heart {
+  background-color: #333333;
+}
+
+body.dark-mode .heart:before,
+body.dark-mode .heart:after {
+  background-color: #333333;
+}
+
+body.dark-mode .triangle {
+  border-bottom-color: #333333;
+}
+
+body.dark-mode .red {
+  background-color: #ff0000;
+}
+
+body.dark-mode .triangle.red {
+  border-bottom-color: #ff0000;
+}
