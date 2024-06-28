@@ -1,3 +1,4 @@
+/* Стилі для контейнера та верхнього контролю */
 .container {
   padding: 20px;
   text-align: center;
@@ -108,7 +109,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: black;
+  background-color: transparent;
 }
 
 .heart:before {
@@ -126,7 +127,7 @@
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 20px solid #ccc;
+  border-bottom: 20px solid transparent;
 }
 
 .green {
@@ -149,35 +150,56 @@
   background-color: white;
 }
 
-/* add dark mode */
+/* Стилі для темної теми */
 body.dark-mode {
   background-color: #121212;
   color: #ffffff;
 }
 
+body.dark-mode .dropbtn {
+  background-color: #333;
+}
+
+body.dark-mode .dropdownContent {
+  background-color: #333;
+  color: #fff;
+}
+
+body.dark-mode .dropdownContent button {
+  color: #fff;
+}
+
+body.dark-mode .dropdownContent button:hover {
+  background-color: #444;
+}
+
+body.dark-mode .themeButton {
+  background-color: #333;
+}
+
 body.dark-mode .gridItem {
-  background-color: #333333;
+  background-color: transparent;
 }
 
 body.dark-mode .square {
-  background-color: #333333;
+  background-color: transparent;
 }
 
 body.dark-mode .circle {
-  background-color: #333333;
+  background-color: transparent;
 }
 
 body.dark-mode .heart {
-  background-color: #333333;
+  background-color: transparent;
 }
 
 body.dark-mode .heart:before,
 body.dark-mode .heart:after {
-  background-color: #333333;
+  background-color: transparent;
 }
 
 body.dark-mode .triangle {
-  border-bottom-color: #333333;
+  border-bottom-color: transparent;
 }
 
 body.dark-mode .red {
@@ -186,4 +208,8 @@ body.dark-mode .red {
 
 body.dark-mode .triangle.red {
   border-bottom-color: #ff0000;
+}
+
+body.dark-mode .text {
+  color: #ffffff;
 }

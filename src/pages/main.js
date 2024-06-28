@@ -8,11 +8,10 @@ const Main = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const mode = localStorage.getItem('theme');
-    if (mode) {
-      setDarkMode(mode === 'dark');
-      document.body.classList.toggle('dark-mode', mode === 'dark');
-    }
+    const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const mode = localStorage.getItem('theme') || (userPrefersDark ? 'dark' : 'light');
+    setDarkMode(mode === 'dark');
+    document.body.classList.toggle('dark-mode', mode === 'dark');
   }, []);
 
   const handleShapeChange = (newShape) => {
@@ -28,8 +27,8 @@ const Main = () => {
   };
 
   const toggleTheme = () => {
+    const newMode = !darkMode ? 'dark' : 'light';
     setDarkMode(!darkMode);
-    const newMode = darkMode ? 'light' : 'dark';
     localStorage.setItem('theme', newMode);
     document.body.classList.toggle('dark-mode', !darkMode);
   };
