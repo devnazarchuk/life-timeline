@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/Main.module.css';
+import { useRouter } from 'next/router';
 
 const Main = () => {
   const [shape, setShape] = useState('square');
   const [interval, setInterval] = useState('years');
   const [color, setColor] = useState('green');
   const [darkMode, setDarkMode] = useState(false);
+  const [birthDate, setBirthDate] = useState(new Date('2000-01-01')); // замінити на дату народження користувача
+
+  const router = useRouter();
 
   useEffect(() => {
     const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -37,10 +41,29 @@ const Main = () => {
     const totalYears = 90;
     const totalElements = interval === 'weeks' ? totalYears * 52 : interval === 'months' ? totalYears * 12 : totalYears;
     let elements = [];
+    const currentDate = new Date();
+
+    const getTimeDifference = () => {
+      if (interval === 'weeks') {
+        return Math.floor((currentDate - new Date(birthDate)) / (1000 * 60 * 60 * 24 * 7));
+      } else if (interval === 'months') {
+        return (currentDate.getFullYear() - new Date(birthDate).getFullYear()) * 12 + (currentDate.getMonth() - new Date(birthDate).getMonth());
+      } else {
+        return currentDate.getFullYear() - new Date(birthDate).getFullYear();
+      }
+    };
+
+    const timeDifference = getTimeDifference();
 
     for (let i = 0; i < totalElements; i++) {
+      let itemColor = i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'green' : color;
       elements.push(
-        <div key={i} className={`${styles[shape]} ${styles.gridItem} ${styles[color]}`}></div>
+        <div
+          key={i}
+          className={`${styles[shape]} ${styles.gridItem} ${styles[itemColor]}`}
+          title={`Interval ${i + 1}`}
+          onClick={() => router.push(`/interval/${i + 1}`)}
+        ></div>
       );
     }
 
@@ -72,7 +95,7 @@ const Main = () => {
           </div>
         </div>
         <button className={styles.themeButton} onClick={toggleTheme}>
-          {darkMode ? 'Light Mode' : 'Dark Mode'}
+          {darkMode ? '🌙' : '☀️'}
         </button>
       </div>
       <div className={styles.controls}>

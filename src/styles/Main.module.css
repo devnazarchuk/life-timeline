@@ -149,11 +149,11 @@
 .white {
   background-color: white;
 }
-
-/* Стилі для темної теми */
+/* Dark mode styles*/
 body.dark-mode {
   background-color: #121212;
   color: #ffffff;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 body.dark-mode .dropbtn {
