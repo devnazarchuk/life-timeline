@@ -48,12 +48,14 @@ const Intro = () => {
         <input
           type="text"
           placeholder="Name"
+          className={styles.formText}
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
         />
         <select
           id="gender"
+          className={styles.formText}
           value={gender}
           onChange={(e) => setGender(e.target.value)}
           required
@@ -66,17 +68,19 @@ const Intro = () => {
         <input
           type="text"
           placeholder="Country"
+          className={styles.formText}
           value={country}
           onChange={(e) => setCountry(e.target.value)}
           required
         />
         <input
           type="date"
+          className={styles.formText}
           value={birthDate}
           onChange={(e) => setBirthDate(e.target.value)}
           required
         />
-        <label>Happiness Level:</label>
+        <label className={styles.label}>Happiness Level:</label>
         <HappinessSlider happiness={happiness} setHappiness={setHappiness} />
         <button type="submit" className={styles.submitButton}>
           Submit

@@ -47,10 +47,12 @@
 
 .dropdownContent button:hover {
   background-color: #f1f1f1;
+  transition: 0.5s;
 }
 
 .dropdown:hover .dropdownContent {
   display: block;
+  transition: 0.5s;
 }
 
 .themeButton {
@@ -171,6 +173,7 @@ body.dark-mode .dropdownContent button {
 
 body.dark-mode .dropdownContent button:hover {
   background-color: #444;
+  transition: 0.5s;
 }
 
 body.dark-mode .themeButton {

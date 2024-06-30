@@ -26,7 +26,9 @@
   width: 100%;
   max-width: 400px;
 }
-
+.formText {
+color: black;
+}
 .formGroup {
   display: flex;
   flex-direction: column;
@@ -70,9 +72,11 @@
 
 .submitButton:hover {
   background-color: #005bb5;
+  transition: 0.5s;
 }
 .submitButton:active {
   background-color: #047bf2;
+  transition: 0.5s;
 }
 
 .themeButton {
@@ -87,6 +91,10 @@
 
 .themeButton:hover {
   background-color: darkslategray;
+  transition: 0.5s;
+}
+.themeButton:active {
+  background-color: rgb(100, 111, 111);
 }
 
 body.dark-mode .themeButton {
