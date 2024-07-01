@@ -63,7 +63,10 @@
   border: none;
   cursor: pointer;
 }
-
+.themeButton:hover {
+  background-color: #3e8e41;
+  transition: 0.5s;
+}
 .controls {
   margin-bottom: 20px;
 }
@@ -78,7 +81,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
-  gap: 5px;
+  gap: 15px;
   justify-content: center;
 }
 
@@ -89,11 +92,17 @@
 
 .square {
   background-color: transparent;
+  border: black 1px solid;
+  box-shadow: 1px 1px 2px 1px black;
+  transition: 1s;
 }
 
 .circle {
   background-color: transparent;
+  border: black 2px solid;
   border-radius: 50%;
+  box-shadow: 1px 1px 2px 1px black;
+  transition: 1s;
 }
 
 .heart {
@@ -102,6 +111,8 @@
   width: 20px;
   height: 20px;
   transform: rotate(-45deg);
+  box-shadow: 2px 2px 5px 2px black;
+  transition: 1.5s;
 }
 
 .heart:before,
@@ -112,6 +123,7 @@
   height: 20px;
   border-radius: 50%;
   background-color: transparent;
+  transition: 1s;
 }
 
 .heart:before {
@@ -122,14 +134,6 @@
 .heart:after {
   left: 10px;
   top: 0;
-}
-
-.triangle {
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 20px solid transparent;
 }
 
 .green {
@@ -201,16 +205,8 @@ body.dark-mode .heart:after {
   background-color: transparent;
 }
 
-body.dark-mode .triangle {
-  border-bottom-color: transparent;
-}
-
 body.dark-mode .red {
   background-color: #ff0000;
-}
-
-body.dark-mode .triangle.red {
-  border-bottom-color: #ff0000;
 }
 
 body.dark-mode .text {

@@ -9,8 +9,9 @@ const Intro = () => {
   const [gender, setGender] = useState("");
   const [country, setCountry] = useState("");
   const [happiness, setHappiness] = useState(50);
-  const [birthDate, setBirthDate] = useState("");
+  const [birthDate, setBirthDate] = useState(null); 
   const [darkMode, setDarkMode] = useState(false);
+  const [interval, setInterval] = useState('years');
 
   const router = useRouter();
 

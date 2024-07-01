@@ -56,14 +56,56 @@ const Main = () => {
     const timeDifference = getTimeDifference();
 
     for (let i = 0; i < totalElements; i++) {
-      let itemColor = i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'green' : color;
+      let itemColor = i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color;
+      let itemStyle = { backgroundColor: itemColor };
+      if (shape === 'heart') {
+        itemStyle = {
+          ...itemStyle,
+          width: '20px',
+          height: '20px',
+          position: 'relative',
+          transform: 'rotate(-45deg)',
+          backgroundColor: color,
+        };
+      }
+
       elements.push(
         <div
           key={i}
-          className={`${styles[shape]} ${styles.gridItem} ${styles[itemColor]}`}
+          className={`${styles[shape]} ${styles.gridItem}`}
+          style={itemStyle}
           title={`Interval ${i + 1}`}
           onClick={() => router.push(`/interval/${i + 1}`)}
-        ></div>
+        >
+          {shape === 'heart' && (
+            <>
+              <div
+                style={{
+                  content: '""',
+                  position: 'absolute',
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  backgroundColor: color,
+                  top: '-10px',
+                  left: '0',
+                }}
+              ></div>
+              <div
+                style={{
+                  content: '""',
+                  position: 'absolute',
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  backgroundColor: color,
+                  left: '10px',
+                  top: '0',
+                }}
+              ></div>
+            </>
+          )}
+        </div>
       );
     }
 
@@ -80,7 +122,6 @@ const Main = () => {
             <button onClick={() => handleShapeChange('square')}>Square</button>
             <button onClick={() => handleShapeChange('circle')}>Circle</button>
             <button onClick={() => handleShapeChange('heart')}>Heart</button>
-            <button onClick={() => handleShapeChange('triangle')}>Triangle</button>
           </div>
         </div>
         <div className={styles.dropdown}>
