@@ -95,7 +95,7 @@
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
   gap: 15px;
   justify-content: center;
 }
@@ -129,22 +129,26 @@
 .heart {
   background-color: transparent;
   position: relative;
-  width: 20px;
-  height: 20px;
+  width: 35px;
+  height: 35px;
   transform: rotate(-45deg);
-  box-shadow: 2px 2px 5px 2px black;
-  transition: 1s;
+  box-shadow: 1px 1px 5px 1px black;
+  transition: 0.8s;
+  margin-bottom: 5px;
 }
-
+.heart:hover {
+  transform: scale(1.1) rotate(45deg);
+  transition:cubic-bezier(1, 0, 0, 1);
+}
 .heart:before,
 .heart:after {
   content: "";
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
-  background-color: transparent;
-  transition: 1s;
+  background-color: inherit;
+  transition: 0.8s;
 }
 
 .heart:before {

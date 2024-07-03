@@ -62,10 +62,9 @@ const Main = () => {
       if (shape === 'heart') {
         itemStyle = {
           ...itemStyle,
-          width: '20px',
-          height: '20px',
+          width: '35px',
+          height: '35px',
           position: 'relative',
-          transform: 'rotate(-45deg)',
           backgroundColor: i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color,
         };
       }
@@ -84,11 +83,11 @@ const Main = () => {
                 style={{
                   content: '""',
                   position: 'absolute',
-                  width: '20px',
-                  height: '20px',
+                  width: '35px',
+                  height: '35px',
                   borderRadius: '50%',
                   backgroundColor: i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color,
-                  top: '-10px',
+                  top: '-15px',
                   left: '0',
                 }}
               ></div>
@@ -96,11 +95,11 @@ const Main = () => {
                 style={{
                   content: '""',
                   position: 'absolute',
-                  width: '20px',
-                  height: '20px',
+                  width: '35px',
+                  height: '35px',
                   borderRadius: '50%',
                   backgroundColor: i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color,
-                  left: '10px',
+                  left: '15px',
                   top: '0',
                 }}
               ></div>
