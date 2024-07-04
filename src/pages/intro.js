@@ -27,8 +27,10 @@ const Intro = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Збереження даних користувача (залежно від вимог вашого проекту)
-    router.push("/main");
+    router.push({
+      pathname: '/main',
+      query: { birthDate },
+    });
   };
 
   const toggleTheme = () => {
@@ -77,6 +79,8 @@ const Intro = () => {
         <input
           type="date"
           className={styles.formText}
+          id="birthDate"
+          name="birthDate"
           value={birthDate}
           onChange={(e) => setBirthDate(e.target.value)}
           required

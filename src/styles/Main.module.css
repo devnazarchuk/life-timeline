@@ -147,7 +147,7 @@
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background-color: inherit;
+  background-color: transparent;
   transition: 0.8s;
 }
 

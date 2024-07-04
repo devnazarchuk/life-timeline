@@ -7,9 +7,8 @@ const Main = () => {
   const [interval, setInterval] = useState('years');
   const [color, setColor] = useState('green');
   const [darkMode, setDarkMode] = useState(false);
-  const [birthDate, setBirthDate] = useState(new Date('2000-01-01')); // замінити на дату народження користувача
-
   const router = useRouter();
+  const { birthDate } = router.query;
 
   useEffect(() => {
     const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
