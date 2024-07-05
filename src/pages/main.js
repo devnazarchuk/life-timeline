@@ -7,8 +7,10 @@ const Main = () => {
   const [interval, setInterval] = useState('years');
   const [color, setColor] = useState('green');
   const [darkMode, setDarkMode] = useState(false);
+  const [searchDate, setSearchDate] = useState('');
   const router = useRouter();
   const { birthDate } = router.query;
+
 
   useEffect(() => {
     const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -36,6 +38,10 @@ const Main = () => {
     document.body.classList.toggle('dark-mode', !darkMode);
   };
 
+  const handleSearch = () => {
+    router.push(`/date/${searchDate}`);
+  };
+
   const generateLifeGrid = () => {
     const totalYears = 90;
     const totalElements = interval === 'weeks' ? totalYears * 52 : interval === 'months' ? totalYears * 12 : totalYears;
@@ -51,19 +57,19 @@ const Main = () => {
         return currentDate.getFullYear() - new Date(birthDate).getFullYear();
       }
     };
-
     const timeDifference = getTimeDifference();
 
     for (let i = 0; i < totalElements; i++) {
       let itemColor = i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color;
       let itemStyle = { backgroundColor: itemColor };
-      
+
       if (shape === 'heart') {
         itemStyle = {
           ...itemStyle,
           width: '35px',
           height: '35px',
           position: 'relative',
+          transform: 'rotate(-45deg)',
           backgroundColor: i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color,
         };
       }
@@ -142,6 +148,15 @@ const Main = () => {
         <button onClick={() => handleIntervalChange('weeks')}>Weeks</button>
         <button onClick={() => handleIntervalChange('months')}>Months</button>
         <button onClick={() => handleIntervalChange('years')}>Years</button>
+      </div>
+      <div className={styles.search}>
+        <input
+          type="date"
+          
+          value={searchDate}
+          onChange={(e) => setSearchDate(e.target.value)}
+        />
+        <button onClick={handleSearch} className={styles.searchButton}>Search</button>
       </div>
       <div className={styles.grid}>
         {generateLifeGrid()}
