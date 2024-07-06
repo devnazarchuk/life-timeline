@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import HappinessSlider from "../components/interface/HappinessSlider";
 import styles from "../styles/Intro.module.css";
-import UserForm from "../components/UserForm";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Intro = () => {
   const [name, setName] = useState("");
@@ -11,7 +12,6 @@ const Intro = () => {
   const [happiness, setHappiness] = useState(50);
   const [birthDate, setBirthDate] = useState(null); 
   const [darkMode, setDarkMode] = useState(false);
-  const [interval, setInterval] = useState('years');
 
   const router = useRouter();
 
@@ -27,9 +27,10 @@ const Intro = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formattedDate = birthDate.toLocaleDateString('en-GB').split('/').reverse().join('-');
     router.push({
       pathname: '/main',
-      query: { birthDate },
+      query: { birthDate: formattedDate },
     });
   };
 
@@ -76,13 +77,12 @@ const Intro = () => {
           onChange={(e) => setCountry(e.target.value)}
           required
         />
-        <input
-          type="date"
+        <DatePicker
+          selected={birthDate}
+          onChange={(date) => setBirthDate(date)}
+          dateFormat="dd/MM/yyyy"
           className={styles.formText}
-          id="birthDate"
-          name="birthDate"
-          value={birthDate}
-          onChange={(e) => setBirthDate(e.target.value)}
+          placeholderText="Birth Date"
           required
         />
         <label className={styles.label}>Happiness Level:</label>

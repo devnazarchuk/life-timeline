@@ -1,0 +1,15 @@
+.moment {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .moment img, .moment video {
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .moment button {
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+  

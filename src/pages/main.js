@@ -40,11 +40,9 @@ const Main = () => {
   };
 
   const handleSearch = () => {
-    router.push(`/date/${searchDate}`);
     const formattedDate = searchDate.toLocaleDateString('en-GB').split('/').reverse().join('-');
     router.push(`/date/${formattedDate}`);
   };
-
 
   const generateLifeGrid = () => {
     const totalYears = 90;
@@ -85,7 +83,18 @@ const Main = () => {
           className={`${styles[shape]} ${styles.gridItem}`}
           style={itemStyle}
           title={`Interval ${i + 1}`}
-          onClick={() => router.push(`/interval/${i + 1}`)}
+          onClick={() => {
+            const targetDate = new Date(birthDate);
+            if (interval === 'weeks') {
+              targetDate.setDate(targetDate.getDate() + i * 7);
+            } else if (interval === 'months') {
+              targetDate.setMonth(targetDate.getMonth() + i);
+            } else {
+              targetDate.setFullYear(targetDate.getFullYear() + i);
+            }
+            const formattedDate = targetDate.toLocaleDateString('en-GB').split('/').reverse().join('-');
+            router.push(`/date/${formattedDate}`);
+          }}
         >
           {shape === 'heart' && (
             <>
