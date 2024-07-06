@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/Main.module.css';
 import { useRouter } from 'next/router';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const Main = () => {
   const [shape, setShape] = useState('square');
   const [interval, setInterval] = useState('years');
   const [color, setColor] = useState('green');
   const [darkMode, setDarkMode] = useState(false);
-  const [searchDate, setSearchDate] = useState('');
+  const [searchDate, setSearchDate] = useState(new Date());
   const router = useRouter();
   const { birthDate } = router.query;
-
 
   useEffect(() => {
     const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -40,7 +41,10 @@ const Main = () => {
 
   const handleSearch = () => {
     router.push(`/date/${searchDate}`);
+    const formattedDate = searchDate.toLocaleDateString('en-GB').split('/').reverse().join('-');
+    router.push(`/date/${formattedDate}`);
   };
+
 
   const generateLifeGrid = () => {
     const totalYears = 90;
@@ -57,6 +61,7 @@ const Main = () => {
         return currentDate.getFullYear() - new Date(birthDate).getFullYear();
       }
     };
+
     const timeDifference = getTimeDifference();
 
     for (let i = 0; i < totalElements; i++) {
@@ -150,11 +155,11 @@ const Main = () => {
         <button onClick={() => handleIntervalChange('years')}>Years</button>
       </div>
       <div className={styles.search}>
-        <input
-          type="date"
-          
-          value={searchDate}
-          onChange={(e) => setSearchDate(e.target.value)}
+        <DatePicker
+          selected={searchDate}
+          onChange={(date) => setSearchDate(date)}
+          dateFormat="dd/MM/yyyy"
+          className={styles.datepicker}
         />
         <button onClick={handleSearch} className={styles.searchButton}>Search</button>
       </div>

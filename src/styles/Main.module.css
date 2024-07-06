@@ -94,14 +94,14 @@
   transition: 1s;
 }
 .search {
-  margin: 10px 0;
+  margin: 0 0 40px 0;
   padding: 10px 20px;
   background: #aedfb0;
   border-radius: 10px;
 }
 .searchButton {
   padding: 10px 25px;
-  margin-top: 10px;
+  margin-left: 10px;
   background: #1db72d;
   border-radius: 10px;
   font-size: 16px;
