@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Profile from '../../components/Profile';
-import styles from '../../styles/ProfilePage.module.css';
+import styles from '../../styles/Profile.module.css';
 
 // Mock data
 const userData = {
