@@ -37,6 +37,7 @@ const DatePage = () => {
   
     if (data) {
       console.log('Fetched data: ', data);
+      setTextEntries(data.textEntries || []);
       setImages(data.images || []);
       setVideos(data.videos || []);
       setMusicLinks(data.musicLinks || []);
