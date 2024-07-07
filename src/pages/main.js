@@ -16,7 +16,7 @@ const Main = () => {
 
   // Mock дані користувача
   const user = {
-    username: 'john_doe',
+    username: 'Ryan-Gosling',
     profilePicture: '/profile.jpg'
   };
 

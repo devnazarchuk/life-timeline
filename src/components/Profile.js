@@ -24,12 +24,12 @@ const Profile = ({ user, onSaveMoments }) => {
       <div className={styles.profileHeader}>
         <img src={user.profilePicture} alt="Profile" className={styles.profilePicture} />
         <div className={styles.userInfo}>
-          <h2>{user.username}</h2>
-          <p>{user.bio}</p>
+          <h2 className={styles.username}>{user.username}</h2>
+          <p className={styles.bio}>{user.bio}</p>
         </div>
       </div>
       <div className={styles.momentsSection}>
-        <h3>Moments</h3>
+        <h3 className={styles.momentsTitle}>Moments</h3>
         {moments.map((moment, index) => (
           <Moment
             key={index}

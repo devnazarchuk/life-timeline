@@ -5,14 +5,16 @@ import styles from '../../styles/Profile.module.css';
 
 // Mock data
 const userData = {
-  username: 'john_doe',
+  username: 'Ryan Gosling',
   profilePicture: '/profile.jpg',
-  bio: 'Loving life and living dreams.',
+  bio: "I think the best way to prepare for anything is to immerse yourself in it, whether it's playing a role or just living life.",
   moments: [
     { id: 1, type: 'text', content: 'Had a great day today!' },
     { id: 2, type: 'image', content: '/moment1.jpg' },
-    { id: 3, type: 'video', content: '/moment2.mp4' },
-    { id: 4, type: 'music', content: 'https://open.spotify.com/track/xyz' },
+    { id: 3, type: 'image', content: '/moment2.jpg' },
+    { id: 4, type: 'video', content: '/moment.mp4' },
+    { id: 5, type: 'music', content: 'https://open.spotify.com/track/1u1ATklwZesAvq1whHsI8Z?si=21305373e5884f9c' },
+
   ],
 };
 
