@@ -146,7 +146,7 @@ const DatePage = () => {
         <div className={styles.images}>
           {images.map((image, index) => (
             <div key={index} className={styles.imageItem}>
-              <Image src={`https://YOUR_BUCKET_NAME.supabase.co/storage/v1/object/public/images/${image}`} alt={`Image ${index + 1}`} width={100} height={100} />
+              <Image src={`${SUPABASE_URL}/storage/v1/object/public/images/${image}`} alt={`Image ${index + 1}`} width={100} height={100} />
               <button onClick={() => removeImage(index)}>Remove</button>
             </div>
           ))}
