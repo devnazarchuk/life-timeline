@@ -79,7 +79,6 @@ const Main = () => {
           width: '35px',
           height: '35px',
           position: 'relative',
-          transform: 'rotate(-45deg)',
           backgroundColor: i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color,
         };
       }
