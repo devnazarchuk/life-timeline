@@ -58,6 +58,7 @@ const Main = () => {
     for (let i = 0; i < totalElements; i++) {
       let itemColor = i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color;
       let itemStyle = { backgroundColor: itemColor };
+      
       if (shape === 'heart') {
         itemStyle = {
           ...itemStyle,
@@ -65,7 +66,7 @@ const Main = () => {
           height: '20px',
           position: 'relative',
           transform: 'rotate(-45deg)',
-          backgroundColor: color,
+          backgroundColor: i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color,
         };
       }
 
@@ -86,7 +87,7 @@ const Main = () => {
                   width: '20px',
                   height: '20px',
                   borderRadius: '50%',
-                  backgroundColor: color,
+                  backgroundColor: i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color,
                   top: '-10px',
                   left: '0',
                 }}
@@ -98,7 +99,7 @@ const Main = () => {
                   width: '20px',
                   height: '20px',
                   borderRadius: '50%',
-                  backgroundColor: color,
+                  backgroundColor: i < timeDifference ? (darkMode ? 'white' : 'black') : i === timeDifference ? 'orange' : color,
                   left: '10px',
                   top: '0',
                 }}

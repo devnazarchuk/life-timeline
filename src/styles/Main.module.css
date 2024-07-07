@@ -95,14 +95,14 @@
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
   gap: 15px;
   justify-content: center;
 }
 
 .gridItem {
-  width: 20px;
-  height: 20px;
+  width: 35px;
+  height: 35px;
 }
 
 .square {
@@ -111,7 +111,10 @@
   box-shadow: 1px 1px 2px 1px black;
   transition: 1s;
 }
-
+.square:hover {
+  transform:scale(1.5) rotate(90deg);
+  transition:cubic-bezier(1, 0, 0, 1);
+}
 .circle {
   background-color: transparent;
   border: black 2px solid;
@@ -119,7 +122,10 @@
   box-shadow: 1px 1px 2px 1px black;
   transition: 1s;
 }
-
+.circle:hover {
+  transform:scale(1.5);
+  transition:cubic-bezier(1, 0, 0, 1);
+}
 .heart {
   background-color: transparent;
   position: relative;
