@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import styles from '../styles/Main.module.css';
 import { useRouter } from 'next/router';
 import DatePicker from 'react-datepicker';
+import ProfileButton from '../components/ProfileButton';
 import 'react-datepicker/dist/react-datepicker.css';
-import ProfileButton from '../components/ProfileButton'; // Імпорт нового компонента
-import styles from '../styles/Main.module.css';
 
 const Main = () => {
   const [shape, setShape] = useState('square');
@@ -14,7 +14,6 @@ const Main = () => {
   const router = useRouter();
   const { birthDate } = router.query;
 
-  // Mock дані користувача
   const user = {
     username: 'Ryan-Gosling',
     profilePicture: '/profile.jpg'
@@ -89,7 +88,18 @@ const Main = () => {
           className={`${styles[shape]} ${styles.gridItem}`}
           style={itemStyle}
           title={`Interval ${i + 1}`}
-          onClick={() => router.push(`/interval/${i + 1}`)}
+          onClick={() => {
+            const targetDate = new Date(birthDate);
+            if (interval === 'weeks') {
+              targetDate.setDate(targetDate.getDate() + i * 7);
+            } else if (interval === 'months') {
+              targetDate.setMonth(targetDate.getMonth() + i);
+            } else {
+              targetDate.setFullYear(targetDate.getFullYear() + i);
+            }
+            const formattedDate = targetDate.toLocaleDateString('en-GB').split('/').reverse().join('-');
+            router.push(`/date/${formattedDate}`);
+          }}
         >
           {shape === 'heart' && (
             <>
@@ -128,7 +138,7 @@ const Main = () => {
 
   return (
     <div className={styles.container}>
-      <ProfileButton profilePicture={user.profilePicture} username={user.username} /> {/* Додавання кнопки профілю */}
+            <ProfileButton profilePicture={user.profilePicture} username={user.username} /> {/* Додавання кнопки профілю */}
       <h1>Life Timeline</h1>
       <div className={styles.topControls}>
         <div className={styles.dropdown}>
