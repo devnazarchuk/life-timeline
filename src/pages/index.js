@@ -7,12 +7,16 @@ import { useRouter } from 'next/router';
 
 const Home = () => {
   const router = useRouter();
+  const routerRef = useRef(router);
 
   useEffect(() => {
-    router.push('/intro');
-  }, []);
+    routerRef.current = router;
+  }, [router]);
+
+  useEffect(() => {
+    routerRef.current.push('/intro');
+  }, [routerRef]);
 
   return null;
 };
-
 export default Home;

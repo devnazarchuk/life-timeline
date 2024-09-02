@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { supabase } from '/supabase.js';
 import styles from '../../styles/DatePage.module.css';
 import Image from 'next/image';
 
@@ -24,101 +23,99 @@ const DatePage = () => {
   }, [date]);
 
   const fetchDateData = async (date) => {
-    const { data, error } = await supabase
-      .from('dates')
-      .select('*')
-      .eq('date', date)
-      .single();
-  
-    if (error) {
-      console.error('Error fetching data: ', error.message);
-      return;
-    }
-  
-    if (data) {
-      console.log('Fetched data: ', data);
+    const res = await fetch(`/api/date?date=${date}`);
+    if (res.ok) {
+      const data = await res.json();
       setTextEntries(data.textEntries || []);
       setImages(data.images || []);
       setVideos(data.videos || []);
       setMusicLinks(data.musicLinks || []);
+    } else {
+      console.error('Error fetching data: ', await res.text());
     }
   };
 
-  const saveToSupabase = async (dataToUpdate) => {
-    const { data, error } = await supabase
-      .from('dates')
-      .upsert({ date, ...dataToUpdate }, { onConflict: ['date'] });
-  
-    if (error) {
-      console.error('Error saving data: ', error.message);
-    } else {
+  const saveToDatabase = async (dataToUpdate) => {
+    const res = await fetch(`/api/date?date=${date}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToUpdate),
+    });
+
+    if (res.ok) {
       console.log('Data successfully saved!');
+    } else {
+      console.error('Error saving data: ', await res.text());
     }
   };
 
   const addText = () => {
     const updatedEntries = [...textEntries, newText];
-    saveToSupabase({ textEntries: updatedEntries });
+    saveToDatabase({ textEntries: updatedEntries });
     setTextEntries(updatedEntries);
     setNewText('');
   };
 
   const removeText = (index) => {
     const updatedEntries = textEntries.filter((_, i) => i !== index);
-    saveToSupabase({ textEntries: updatedEntries });
+    saveToDatabase({ textEntries: updatedEntries });
     setTextEntries(updatedEntries);
   };
-
+//////////////////////////////////////////////
   const addImage = async () => {
     if (newImage) {
-      const fileExt = newImage.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExt}`;
-      const { data, error } = await supabase
-        .storage
-        .from('images')
-        .upload(fileName, newImage);
-
-      if (data) {
-        const filePath = data.path;
+      const formData = new FormData();
+      formData.append('file', newImage);
+  
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (res.ok) {
+        const { filePath } = await res.json();
         const updatedImages = [...images, filePath];
-        saveToSupabase({ images: updatedImages });
+        saveToDatabase({ images: updatedImages });
         setImages(updatedImages);
+        setNewImage(null);
       } else {
-        console.error('Error uploading image: ', error);
+        console.error('Error uploading image: ', await res.text());
       }
-      setNewImage(null);
     }
   };
+  
 
   const removeImage = (index) => {
     const updatedImages = images.filter((_, i) => i !== index);
-    saveToSupabase({ images: updatedImages });
+    saveToDatabase({ images: updatedImages });
     setImages(updatedImages);
   };
 
   const addVideo = () => {
     const updatedVideos = [...videos, newVideo];
-    saveToSupabase({ videos: updatedVideos });
+    saveToDatabase({ videos: updatedVideos });
     setVideos(updatedVideos);
     setNewVideo('');
   };
 
   const removeVideo = (index) => {
     const updatedVideos = videos.filter((_, i) => i !== index);
-    saveToSupabase({ videos: updatedVideos });
+    saveToDatabase({ videos: updatedVideos });
     setVideos(updatedVideos);
   };
 
   const addMusic = () => {
     const updatedMusicLinks = [...musicLinks, newMusic];
-    saveToSupabase({ musicLinks: updatedMusicLinks });
+    saveToDatabase({ musicLinks: updatedMusicLinks });
     setMusicLinks(updatedMusicLinks);
     setNewMusic('');
   };
 
   const removeMusic = (index) => {
     const updatedMusicLinks = musicLinks.filter((_, i) => i !== index);
-    saveToSupabase({ musicLinks: updatedMusicLinks });
+    saveToDatabase({ musicLinks: updatedMusicLinks });
     setMusicLinks(updatedMusicLinks);
   };
 
@@ -146,7 +143,7 @@ const DatePage = () => {
         <div className={styles.images}>
           {images.map((image, index) => (
             <div key={index} className={styles.imageItem}>
-              <Image src={`${NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images/${image}`} alt={`Image ${index + 1}`} width={100} height={100} />
+              <Image src={image} alt={`Image ${index + 1}`} width={100} height={100} />
               <button onClick={() => removeImage(index)}>Remove</button>
             </div>
           ))}

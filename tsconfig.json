@@ -30,8 +30,8 @@
     "src/pages/index.js",
     "src/pages/layout.js",
     "src/components/ResizableTitle.ts",
-    "src/shared/services/index.ts",
-    "src/shared/services/QueryProvider.ts",
+    "src/shared/api/index.ts",
+    "src/shared/api/QueryProvider.ts",
     "src/components/ui/button.ts"
   ],
   "exclude": ["node_modules"]
