@@ -4,6 +4,9 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
+import Modal from './Modal'; // Import Modal
+import BlockDetailForm from './BlockDetailForm'; // Import BlockDetailForm
+import SearchBar from './SearchBar'; // Import SearchBar
 import {
   differenceInWeeks,
   eachWeekOfInterval,
@@ -21,7 +24,10 @@ import {
   isSameYear,
   getYear,
   getISOWeek,
-  getMonth
+  getMonth,
+  parse,
+  isValid,
+  // getDate // Not used yet, but good to have if needed
 } from 'date-fns';
 import type { LifeBlockId } from '@/types/calendar';
 
@@ -33,13 +39,14 @@ interface TimeBlockProps {
   mode: ViewMode;
   isCurrent: boolean;
   isPastBlock: boolean;
+  isHighlighted: boolean; // Added for search highlight
   onClick: () => void;
   onHover: (tooltip: string | null) => void;
 }
 
 type ViewMode = 'weeks' | 'months' | 'years';
 
-const TimeBlock: React.FC<TimeBlockProps> = ({ id, date, mode, isCurrent, isPastBlock, onClick, onHover }) => {
+const TimeBlock: React.FC<TimeBlockProps> = ({ id, date, mode, isCurrent, isPastBlock, isHighlighted, onClick, onHover }) => {
   let bgColor = 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'; // Future
   if (isCurrent) {
     bgColor = 'bg-yellow-400 dark:bg-yellow-500 animate-pulse';
@@ -58,11 +65,12 @@ const TimeBlock: React.FC<TimeBlockProps> = ({ id, date, mode, isCurrent, isPast
   if (mode === 'months') squareSizeClasses = "w-8 h-8"; // Larger for months
   if (mode === 'years') squareSizeClasses = "w-12 h-12"; // Even larger for years
 
+  const highlightClass = isHighlighted ? 'ring-2 ring-pink-500 ring-offset-1 dark:ring-offset-black shadow-lg' : '';
 
   return (
     <div
       id={id}
-      className={`border border-gray-300 dark:border-gray-600 ${squareSizeClasses} ${bgColor} transition-colors duration-150 cursor-pointer`}
+      className={`border border-gray-300 dark:border-gray-600 ${squareSizeClasses} ${bgColor} ${highlightClass} transition-colors duration-150 cursor-pointer`}
       onClick={onClick}
       onMouseEnter={() => onHover(getTooltipText())}
       onMouseLeave={() => onHover(null)}
@@ -73,13 +81,18 @@ const TimeBlock: React.FC<TimeBlockProps> = ({ id, date, mode, isCurrent, isPast
 
 export default function LifeGrid() {
   const router = useRouter();
-  const { dob } = useUserStore();
+  const { dob, getBlock, blocks: allBlocksFromStore } = useUserStore(); // Get all blocks for searching
   const [viewMode, setViewMode] = useState<ViewMode>('weeks');
   const [tooltip, setTooltip] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBlockId, setSelectedBlockId] = useState<LifeBlockId | null>(null);
+  const [highlightedBlockId, setHighlightedBlockId] = useState<LifeBlockId | null>(null);
 
   const currentDateRef = useRef(new Date()); // Keep current date stable for a render pass
   const currentBlockRef = useRef<HTMLDivElement | null>(null);
+  const blockRefs = useRef<Map<LifeBlockId, HTMLDivElement | null>>(new Map());
+
 
   useEffect(() => {
     setIsClient(true);
@@ -87,6 +100,81 @@ export default function LifeGrid() {
       router.push('/');
     }
   }, [dob, router]);
+
+  const handleBlockClick = (blockId: LifeBlockId) => {
+    setSelectedBlockId(blockId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedBlockId(null);
+    // Potentially trigger a re-fetch or re-calculation of grid data if needed,
+    // though Zustand should handle updates reactively.
+  };
+
+  const selectedBlockData = selectedBlockId ? getBlock(selectedBlockId) : undefined;
+  const modalTitle = selectedBlockId ? `Details for ${selectedBlockId.replace(/_/g, ' ')}` : 'Block Details';
+
+  const handleSearch = (query: string) => {
+    setHighlightedBlockId(null); // Clear previous highlight
+
+    if (!query.trim()) return;
+
+    // Try parsing as a date first (YYYY-MM-DD, YYYY-MM, YYYY)
+    let targetBlockId: LifeBlockId | undefined = undefined;
+    const dateFormats = ['yyyy-MM-dd', 'yyyy-MM', 'yyyy'];
+    let parsedDate: Date | null = null;
+
+    for (const fmt of dateFormats) {
+      const dt = parse(query, fmt, new Date());
+      if (isValid(dt)) {
+        parsedDate = dt;
+        break;
+      }
+    }
+
+    if (parsedDate) {
+      const year = getYear(parsedDate);
+      const month = getMonth(parsedDate) + 1; // 1-indexed
+      const week = getISOWeek(parsedDate);
+
+      if (dateFormats.includes(query) && query.length === 4) { // YYYY
+        targetBlockId = `year_${year}_${year}` as LifeBlockId;
+      } else if (dateFormats.includes(query) && query.length === 7) { // YYYY-MM
+        targetBlockId = `month_${year}_${month}` as LifeBlockId;
+      } else { // Default to week or if full date is given, or if viewMode is weeks
+         targetBlockId = `week_${year}_${week}` as LifeBlockId;
+         // A more robust logic might try to find the most specific block existing or switch view mode
+      }
+    } else {
+      // If not a date, search content (case-insensitive)
+      const lowerQuery = query.toLowerCase();
+      // Iterate in a way that finds the earliest block if multiple matches
+      const sortedBlockIds = Object.keys(allBlocksFromStore).sort() as LifeBlockId[];
+
+      for (const id of sortedBlockIds) {
+        const block = allBlocksFromStore[id];
+        if (block?.text?.toLowerCase().includes(lowerQuery)) {
+          targetBlockId = id;
+          break;
+        }
+      }
+    }
+
+    if (targetBlockId) {
+      const targetElement = blockRefs.current.get(targetBlockId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+        setHighlightedBlockId(targetBlockId);
+        setTimeout(() => setHighlightedBlockId(null), 3000); // Highlight for 3 seconds
+      } else {
+        alert(`Block found (ID: ${targetBlockId}) but not currently visible. Try changing the view mode or your search query to be more specific for the current view mode.`);
+      }
+    } else {
+      alert('No matching blocks found for your query.');
+    }
+  };
 
   useEffect(() => {
     // Scroll to current block if it exists
@@ -172,15 +260,22 @@ export default function LifeGrid() {
   const renderGridContent = () => {
     if (viewMode === 'weeks') {
         return timeBlocks.map(block => (
-            <div key={block.id} ref={block.isCurrent ? currentBlockRef : null}>
-                <TimeBlock {...block} mode={viewMode} onClick={() => console.log('Clicked', block.id)} onHover={setTooltip} />
+            <div
+              key={block.id}
+              ref={el => {
+                if (el) blockRefs.current.set(block.id, el);
+                else blockRefs.current.delete(block.id);
+                if (block.isCurrent) currentBlockRef.current = el;
+              }}
+            >
+                <TimeBlock {...block} mode={viewMode} onClick={() => handleBlockClick(block.id)} onHover={setTooltip} isHighlighted={block.id === highlightedBlockId} />
             </div>
         ));
     }
 
     // For months and years, group by year/decade for better layout
     const groupedBlocks: { [groupKey: string]: typeof timeBlocks } = {};
-    timeBlocks.forEach(block => {
+    timeBlocks.forEach(block => { // Ensure all blocks get a ref regardless of grouping
         const year = getYear(block.date);
         const groupKey = viewMode === 'months' ? year.toString() : Math.floor(year / 10).toString() + "0s";
         if (!groupedBlocks[groupKey]) {
@@ -194,8 +289,15 @@ export default function LifeGrid() {
             <h3 className="text-lg font-semibold my-2 dark:text-white">{viewMode === 'months' ? `Year ${groupTitle}` : `Decade ${groupTitle}`}</h3>
             <div className={`grid ${viewMode === 'months' ? gridClasses.months : gridClasses.years} gap-px`}>
                 {blocksInGroup.map(block => (
-                     <div key={block.id} ref={block.isCurrent ? currentBlockRef : null}>
-                        <TimeBlock {...block} mode={viewMode} onClick={() => console.log('Clicked', block.id)} onHover={setTooltip} />
+                     <div
+                        key={block.id}
+                        ref={el => {
+                            if (el) blockRefs.current.set(block.id, el);
+                            else blockRefs.current.delete(block.id);
+                            if (block.isCurrent) currentBlockRef.current = el;
+                        }}
+                     >
+                        <TimeBlock {...block} mode={viewMode} onClick={() => handleBlockClick(block.id)} onHover={setTooltip} isHighlighted={block.id === highlightedBlockId} />
                     </div>
                 ))}
             </div>
@@ -206,6 +308,7 @@ export default function LifeGrid() {
 
   return (
     <div className="container mx-auto p-4 relative">
+      <SearchBar onSearch={handleSearch} />
       <h2 className="text-3xl font-serif mb-6 text-center dark:text-white">Your Life in {viewMode.charAt(0).toUpperCase() + viewMode.slice(1)}</h2>
 
       <div className="flex justify-center space-x-2 mb-6">
@@ -241,6 +344,17 @@ export default function LifeGrid() {
             <div className="flex items-center"><div className="w-4 h-4 bg-gray-100 dark:bg-gray-700 mr-2 border border-gray-400"></div><span className="dark:text-gray-300">Future</span></div>
         </div>
       </div>
+
+      {selectedBlockId && (
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={modalTitle}>
+          <BlockDetailForm
+            blockId={selectedBlockId}
+            initialData={selectedBlockData}
+            onSave={handleCloseModal} // Close modal on save
+            onClose={handleCloseModal}
+          />
+        </Modal>
+      )}
     </div>
   );
 }
