@@ -21,7 +21,11 @@ import {
   isSameYear,
   getYear,
   getISOWeek,
-  getMonth
+  getMonth,
+  addWeeks,
+  addMonths,
+  differenceInMonths,
+  differenceInYears
 } from 'date-fns';
 import type { LifeBlockId } from '@/types/calendar';
 
@@ -73,8 +77,7 @@ const TimeBlock: React.FC<TimeBlockProps> = ({ id, date, mode, isCurrent, isPast
 
 export default function LifeGrid() {
   const router = useRouter();
-  const { dob } = useUserStore();
-  const [viewMode, setViewMode] = useState<ViewMode>('weeks');
+  const { dob, viewMode, setViewMode } = useUserStore();
   const [tooltip, setTooltip] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
 
@@ -95,63 +98,61 @@ export default function LifeGrid() {
     }
   }, [viewMode, dob]); // Re-scroll if mode or DOB changes
 
-  const birthDate = useMemo(() => {
-    if (!dob) return null;
-    // Safari compatibility: replace '-' with '/'
-    const parts = dob.split('-');
-    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-  }, [dob]);
+  const blocks = useMemo(() => {
+    if (!dob) return [];
 
-  const timeBlocks = useMemo(() => {
-    if (!birthDate) return [];
-
-    const today = currentDateRef.current;
-    const firstYearStart = startOfYear(birthDate);
-    const lastYearEnd = endOfYear(addYears(firstYearStart, TOTAL_YEARS - 1));
-
-    let blocks: Array<{ id: LifeBlockId; date: Date; isCurrent: boolean; isPastBlock: boolean }> = [];
+    const birthDate = new Date(dob);
+    const today = new Date();
+    const blocks = [];
 
     if (viewMode === 'weeks') {
-      const allWeeks = eachWeekOfInterval({ start: firstYearStart, end: lastYearEnd }, { weekStartsOn: 1 /* Monday */ });
-      blocks = allWeeks.map(weekDate => {
-        const yearNum = getYear(weekDate);
-        const weekNum = getISOWeek(weekDate);
-        return {
-          id: `week_${yearNum}_${weekNum}` as LifeBlockId,
-          date: weekDate,
-          isCurrent: isSameWeek(weekDate, today, { weekStartsOn: 1 }),
-          isPastBlock: isPast(weekDate) && !isSameWeek(weekDate, today, { weekStartsOn: 1 }),
-        };
-      });
+      const totalWeeks = 90 * 52; // 90 years in weeks
+      for (let i = 0; i < totalWeeks; i++) {
+        const blockDate = addWeeks(birthDate, i);
+        const isPast = blockDate <= today;
+        const isCurrent = blockDate.toDateString() === today.toDateString();
+        
+        blocks.push({
+          id: `week_${Math.floor(i / 52)}_${i % 52}`,
+          date: blockDate,
+          isPast,
+          isCurrent,
+        });
+      }
     } else if (viewMode === 'months') {
-      const allMonths = eachMonthOfInterval({ start: firstYearStart, end: lastYearEnd });
-      blocks = allMonths.map(monthDate => {
-        const yearNum = getYear(monthDate);
-        const monthNum = getMonth(monthDate) + 1; // 1-indexed
-         return {
-          id: `month_${yearNum}_${monthNum}` as LifeBlockId,
-          date: monthDate,
-          isCurrent: isSameMonth(monthDate, today),
-          isPastBlock: isPast(monthDate) && !isSameMonth(monthDate, today),
-        };
-      });
-    } else if (viewMode === 'years') {
-      const allYears = eachYearOfInterval({ start: firstYearStart, end: lastYearEnd });
-       blocks = allYears.map(yearDate => {
-        const yearNum = getYear(yearDate);
-        return {
-          id: `year_${yearNum}_${yearNum}` as LifeBlockId, // year_YYYY_YYYY to keep similar structure
-          date: yearDate,
-          isCurrent: isSameYear(yearDate, today),
-          isPastBlock: isPast(yearDate) && !isSameYear(yearDate, today),
-        };
-      });
+      const totalMonths = 90 * 12; // 90 years in months
+      for (let i = 0; i < totalMonths; i++) {
+        const blockDate = addMonths(birthDate, i);
+        const isPast = blockDate <= today;
+        const isCurrent = differenceInMonths(today, blockDate) === 0;
+        
+        blocks.push({
+          id: `month_${Math.floor(i / 12)}_${i % 12}`,
+          date: blockDate,
+          isPast,
+          isCurrent,
+        });
+      }
+    } else {
+      // years view
+      for (let i = 0; i < 90; i++) {
+        const blockDate = addYears(birthDate, i);
+        const isPast = blockDate <= today;
+        const isCurrent = differenceInYears(today, blockDate) === 0;
+        
+        blocks.push({
+          id: `year_${i}`,
+          date: blockDate,
+          isPast,
+          isCurrent,
+        });
+      }
     }
+
     return blocks;
+  }, [dob, viewMode]);
 
-  }, [birthDate, viewMode]);
-
-  if (!isClient || !birthDate) {
+  if (!isClient || !dob) {
     // Show loading or redirect handled by useEffect
     return <div className="flex justify-center items-center min-h-screen"><p>Loading or redirecting...</p></div>;
   }
@@ -171,7 +172,7 @@ export default function LifeGrid() {
 
   const renderGridContent = () => {
     if (viewMode === 'weeks') {
-        return timeBlocks.map(block => (
+        return blocks.map(block => (
             <div key={block.id} ref={block.isCurrent ? currentBlockRef : null}>
                 <TimeBlock {...block} mode={viewMode} onClick={() => console.log('Clicked', block.id)} onHover={setTooltip} />
             </div>
@@ -179,8 +180,8 @@ export default function LifeGrid() {
     }
 
     // For months and years, group by year/decade for better layout
-    const groupedBlocks: { [groupKey: string]: typeof timeBlocks } = {};
-    timeBlocks.forEach(block => {
+    const groupedBlocks: { [groupKey: string]: typeof blocks } = {};
+    blocks.forEach(block => {
         const year = getYear(block.date);
         const groupKey = viewMode === 'months' ? year.toString() : Math.floor(year / 10).toString() + "0s";
         if (!groupedBlocks[groupKey]) {

@@ -72,7 +72,7 @@ export default function LandingPage() {
       <div className="p-8 bg-white dark:bg-dark-surface shadow-2xl rounded-lg w-full max-w-md text-center">
         <h1 className="text-4xl font-serif mb-8">Welcome to Your Life Calendar</h1>
         <p className="mb-6 text-lg">
-          Let's begin by setting your date of birth. This will help us create your personalized life grid.
+          Let&apos;s begin by setting your date of birth. This will help us create your personalized life grid.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">

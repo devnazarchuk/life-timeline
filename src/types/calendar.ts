@@ -3,6 +3,8 @@
 // Type for the unique identifier of each life block.
 // The template literal types will ensure the format is correct.
 // Example: 'week_2023_52', 'month_2024_01', 'year_1990'
+export type ViewMode = 'weeks' | 'months' | 'years';
+
 export type LifeBlockId = `week_${number}_${number}` | `month_${number}_${number}` | `year_${number}`;
 
 // Interface for the data stored within each life block.
