@@ -16,7 +16,7 @@ interface TimeBlockProps {
   onHover: (text: string | null) => void;
 }
 
-const TimeBlock: React.FC<TimeBlockProps> = ({ id, date, isCurrent, isPast, onClick, onHover }) => {
+const TimeBlock: React.FC<TimeBlockProps> = ({ date, isCurrent, isPast, onClick, onHover }) => {
   return (
     <div
       className={`aspect-square rounded-sm transition-colors cursor-pointer ${
