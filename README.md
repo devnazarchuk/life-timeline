@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Life Timeline
 
-## Getting Started
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-First, run the development server:
+A highly interactive, visual, and emotional life-tracking app. See your entire lifetime (up to 90 years) as a grid of weeks, months, or years. Reflect on your past, live more consciously, and plan for the future by associating memories, media, and stories with each moment of your life.
 
+---
+
+## ✨ Features
+- **Landing Page:** Enter your date of birth or select age to start
+- **Life Grid Dashboard:** 90x52 week grid (also months/years), color-coded for past/current/future
+- **Block Detail Modal:** Add/edit text (Markdown), images, YouTube, Spotify, privacy per block
+- **Search:** Find blocks by date or content, jump and highlight
+- **Profile Page:** Avatar, name, bio, markdown intro, pinned public memories
+- **Dark Mode:** Toggle anytime
+- **All data stored locally:** No backend, everything in your browser (localStorage + Zustand)
+
+---
+
+## 🛠️ Tech Stack
+- **Framework:** Next.js (App Router)
+- **Styling:** Tailwind CSS
+- **State Management:** Zustand (with localStorage persistence)
+- **Date Logic:** date-fns
+- **Media Preview:** Native (images), YouTube/Spotify embeds
+- **Animations:** Tailwind transitions (Framer Motion ready)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Install dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Run locally
+```bash
+npm run dev
+```
+Visit [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Build for production
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📸 Screenshots
 
-To learn more about Next.js, take a look at the following resources:
+> _Add screenshots here_
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📦 Data Storage
+- All user data is stored in `localStorage` under the key `life_calendar_user`.
+- State is managed with Zustand and synced automatically.
+- No backend or cloud required.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 License
+MIT

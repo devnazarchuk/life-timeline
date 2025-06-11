@@ -1,0 +1,233 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+A highly interactive, visual, and emotional life-tracking app that shows your entire lifetime (up to 90 years) as a grid of weeks, months, or years. The goal is to help you reflect on your past, live more consciously in the present, and plan for the future — by associating memories, media, and stories with each moment of your life.
+
+🧠 Core Philosophy & Intent
+This app is more than a calendar — it’s a visual autobiography, emotional journal, and a life organizer. Users should feel like they are literally “painting” their life with experiences — one block at a time.
+
+🔁 Initial Development Decision
+We will not use any backend or database for now.
+
+All data will be:
+
+Stored in the browser using localStorage
+
+Managed in memory using a modern state manager (e.g. Zustand)
+
+Why?
+
+Faster prototyping
+
+Easier debugging
+
+Simpler UX testing
+
+Backend (Supabase/Firebase) will be integrated after the design and logic are complete.
+
+🧱 Feature Breakdown (Phase 1 – Without Database)
+1. Landing Page (Intro)
+Purpose: Allow user to input their birth date or select their age.
+
+Fields:
+
+Date of birth picker (input[type="date"])
+
+Or select age from buttons (e.g., 10, 20, 25, 30…)
+
+Actions:
+
+Save date to localStorage
+
+Redirect to life grid view (/dashboard)
+
+Styling:
+
+Minimalist
+
+Soft animated entry
+
+Fullscreen centered form
+
+Theme: soft pastels or dark mode with contrast
+
+2. Life Grid View (Dashboard)
+Layout: Full grid of 90 years × 52 weeks = 4680 squares
+
+Modes: Switch between views:
+
+Weeks (default)
+
+Months
+
+Years
+
+Color Coding:
+
+Past: black/dark gray
+
+Current time block: yellow
+
+Future: empty or transparent
+
+Interactions:
+
+Hover to see tooltip (date range)
+
+Click to open block detail (modal or page)
+
+Performance:
+
+Grid generation based on birthdate
+
+Memoized logic for rendering
+
+Style:
+
+Responsive grid using CSS Grid
+
+Adaptive square size
+
+Scrollable with auto-positioning to current block
+
+3. Block Detail View (Modal or Route)
+When user clicks a square (week/month/year), open a detail view.
+
+Fields per time block:
+
+Text:
+
+Markdown or rich text editor
+
+Lists, stories, reflections
+
+Images:
+
+Local image upload
+
+Gallery with preview and slider
+
+Videos:
+
+YouTube embed (via URL)
+
+Music:
+
+Spotify embed (via link or ID)
+
+Buttons:
+
+Save, Edit, Delete
+
+Storage:
+
+All data saved to localStorage by unique block key (e.g. year_24_week_12)
+
+4. Search & Navigation
+Search bar on top of dashboard:
+
+Search by date
+
+Search by content (title, tags, text)
+
+Scroll to block on result
+
+Optional: highlight matched block with animation
+
+5. User Profile Page
+Two layouts:
+
+Simple Profile:
+
+Avatar
+
+Name, bio
+
+List of pinned/important memories
+
+GitHub-style Profile:
+
+Editable Markdown block
+
+HTML + preview mode
+
+Stored in localStorage
+
+6. Privacy Control (Basic Version)
+For each memory, select visibility:
+
+Public (shown in profile)
+
+Private (only user can see)
+
+Close friends (future implementation)
+
+In this version: only visual indication, no actual auth/friends system
+
+🧰 Tech Stack (No Backend Yet)
+Purpose	Tool
+Framework	React + Next.js (App Router)
+Styling	Tailwind CSS
+State Management	Zustand
+Date Logic	date-fns
+Media Preview	Swiper (for image/video sliders)
+Storage	localStorage (via Zustand middleware)
+Animations	Framer Motion (optional)
+
+💾 Data Storage Strategy (Without DB)
+ts
+Copy
+Edit
+type LifeBlockId = `week_${year}_${week}` | `month_${year}_${month}` | `year_${year}`;
+
+interface LifeBlockData {
+  text: string;
+  images: string[];
+  videos: string[];
+  spotify: string[];
+  visibility: "public" | "private" | "friends";
+}
+
+interface UserData {
+  dob: string; // YYYY-MM-DD
+  profile: {
+    name: string;
+    bio: string;
+    avatarUrl: string;
+    markdownIntro?: string;
+  };
+  blocks: Record<LifeBlockId, LifeBlockData>;
+}
+All data is stored under one key:
+
+ts
+Copy
+Edit
+localStorage.setItem("life_calendar_user", JSON.stringify(userData));
+Zustand will read and sync this data on app load.
+
+🎨 Styling Guidelines
+Theme: Soft, reflective, minimal. Dark mode toggle available.
+
+Font: Sans-serif for UI, serif for reflection entries.
+
+Spacing: Airy, centered layouts
+
+Animations:
+
+Page transitions (Framer Motion)
+
+Highlighting selected block
+
+Smooth scroll to block
+
+✅ Milestone-Based Plan
+Week	Tasks
+1	Set up Next.js, Zustand, Tailwind. Build DOB entry + routing
+2	Build life grid view, color logic, and toggle modes
+3	Implement block interaction: text/image/video/music modals
+4	Create profile page + search system
+5	Polish UI/UX, persist everything to localStorage
+6	Testing, accessibility improvements, ready for backend integration
